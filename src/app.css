@@ -1,0 +1,153 @@
+.others-appHeader {
+  background-color: black !important;
+}
+
+.print-container {
+  font-family: 'Calibri' !important;
+  font-size: 18px !important;
+}
+
+.form-label-custom {
+  display: block;
+  margin: 0 0 .28571429rem 0;
+  color: rgba(0,0,0,.87);
+  font-size: .92857143em;
+  font-weight: 700;
+  text-transform: none;
+}
+
+.main-container {
+
+}
+
+#root {
+  height: 100%;
+  background-image: url('./static/images/temple.PNG');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.item .shaswatha-seva-item {
+  background-color: darkorange;
+}
+
+.print-container {
+  position: relative;
+}
+
+.bill-no-main {
+  position: absolute;
+  top: 145px;
+  left: 530px;
+}
+
+.bill-date-main {
+  position: absolute;
+  top: 145px;
+  left: 900px;
+}
+
+.devotee-name-main {
+  position: absolute;
+  top: 190px;
+  left: 560px;
+}
+
+.cost-main {
+  position: absolute;
+  top: 230px;
+  left: 520px;
+}
+
+.gotra-main {
+  position: absolute;
+  top: 300px;
+  left: 540px;
+}
+
+.nakshatra-main {
+  position: absolute;
+  top: 300px;
+  left: 850px
+}
+
+.seva-name-main {
+  position: absolute;
+  top: 345px;
+  left: 580px
+}
+
+.seva-date-main {
+  position: absolute;
+  top: 345px;
+  left: 900px;
+}
+
+.cost-main-2 {
+  position: absolute;
+  top: 405px;
+  left: 540px;
+}
+
+.contact-num-main {
+  position: absolute;
+  top: 150px;
+  left: 200px
+}
+
+
+/*Secondary print configuration*/
+.bill-no-sec {
+  position: absolute;
+  top: 145px;
+  left: 130px;
+}
+
+.bill-date-sec {
+  position: absolute;
+  top: 145px;
+  left: 300px;
+}
+
+.devotee-name-sec {
+  position: absolute;
+  top: 190px;
+  left: 160px;
+}
+
+.cost-sec {
+  position: absolute;
+  top: 230px;
+  left: 120px;
+}
+
+.gotra-sec {
+  position: absolute;
+  top: 300px;
+  left: 140px;
+}
+
+.nakshatra-sec {
+  position: absolute;
+  top: 300px;
+  left: 350px
+}
+
+.seva-name-sec {
+  position: absolute;
+  top: 340px;
+  left: 180px
+}
+
+.seva-date-sec {
+  position: absolute;
+  top: 370px;
+  left: 180px;
+}
+
+.cost-sec-2 {
+  position: absolute;
+  top: 405px;
+  left: 140px;
+}

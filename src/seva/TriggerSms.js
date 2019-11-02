@@ -43,7 +43,7 @@ class TriggerSms extends Component {
           <Grid centered>
             <Grid.Row centered columns={4}>
               <Grid.Column>
-               <Button primary loading={loading} disabled={smsTriggered} onClick={this.submitSeva}>Submit</Button>
+               <Button primary loading={loading} disabled={smsTriggered} onClick={this.submitSeva}>Trigger the Sms now for events happening after 2Days</Button>
                {
                  smsTriggered &&
                    <Message positive>

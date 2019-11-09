@@ -43,10 +43,10 @@ class FormExampleSubcomponentControl extends Component {
         'Content-Type': 'application/json'
         },
         body: JSON.stringify(sevaData)
-      }).then((response) => {
-        console.log(response)
-        this.setState({sevaSubmitted: true, loading: false})
-      }) //.then((response) => response.json())
+      }).then((response) => response.json()).then((response) => {
+        const {data} = response
+        this.setState({sevaSubmitted: true, loading: false, id: data})
+      })
     }
     /*For testing purpose, uncomment this*/
     //this.setState({sevaSubmitted: true, loading: false})
@@ -69,7 +69,6 @@ class FormExampleSubcomponentControl extends Component {
   }
 
   render () {
-    console.log('latest package-14sept')
     const {cost, sevaName, sevaDate, sevaSubmitted, loading} = this.state
     return (
     <React.Fragment>

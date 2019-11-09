@@ -16,10 +16,10 @@ class EventsCalendar extends Component {
       <React.Fragment>
         <Segment inverted>
           <Menu inverted secondary>
-            <Menu.Item name='home'> <NavLink to="/seva-billing">Add Seva</NavLink> </Menu.Item>
-            <Menu.Item name='messages'> <NavLink to="/seva-billing">Resume</NavLink> </Menu.Item>
-            <Menu.Item name='Events Calendar'> <NavLink to="/events-calendar">Events Calendar</NavLink> </Menu.Item>
-            <Menu.Item name='Seva Reorts'> <NavLink to="/seva-report">Seva Reorts</NavLink> </Menu.Item>
+            <Menu.Item name='home'> <NavLink to='/seva-billing'>Add Seva</NavLink> </Menu.Item>
+            <Menu.Item name='Events Calendar'> <NavLink to='/events-calendar'>Events Calendar</NavLink> </Menu.Item>
+            <Menu.Item name='Seva Reorts'> <NavLink to='/seva-report'>Seva Reorts</NavLink> </Menu.Item>
+            <Menu.Item name='Trigger SMS'> <NavLink to='/trigger-sms'>Trigger SMS</NavLink> </Menu.Item>
           </Menu>
         </Segment>
 

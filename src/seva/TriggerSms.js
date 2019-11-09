@@ -9,7 +9,7 @@ class TriggerSms extends Component {
     e.preventDefault()
     this.setState({loading: true})
 
-    if (!sevaSubmitted) {
+    if (!this.state.smsTriggered) {
       fetch('http://localhost:8085/SevaBilling/rest/Service/sms', {
         method: 'GET',
         headers: {
@@ -17,7 +17,6 @@ class TriggerSms extends Component {
         'Content-Type': 'application/json'
         }
       }).then((response) => {
-        console.log(response)
         this.setState({loading: false, smsTriggered: true})
       })
     }
@@ -25,7 +24,6 @@ class TriggerSms extends Component {
 
 
   render () {
-    console.log('latest package-21sept')
     const {smsTriggered, loading} = this.state
     return (
     <React.Fragment>

@@ -35,7 +35,13 @@ const sevas = [
     value: 'prasada-seva-curd-rice',
     key: 'prasada-seva-curd-rice',
     text: 'Prasada Seva (Curd Rice)',
-    amount: 300
+    amount: 500
+  },
+  {
+    value: 'tuppadha-seva',
+    key: 'tuppadha-seva',
+    text: 'Tuppadha seva',
+    amount: 500
   },
   {
     value: 'Purna-Seva',

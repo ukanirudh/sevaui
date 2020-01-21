@@ -2,9 +2,13 @@ import React, { Component } from 'react'
 import { Grid, Container, Segment, Menu, Dropdown, Button, Header, Table } from 'semantic-ui-react'
 import { NavLink } from 'react-router-dom'
 import DatePicker from "react-datepicker";
-import FilteredSevas from './FilteredTable'
+//import FilteredSevas from './FilteredTable'
 import moment from 'moment'
 import sevas from '../static/data/sevaTypes'
+
+import * as jsPDF from 'jspdf'
+import html2canvas from 'html2canvas';
+import DownloadReportTable from './DownloadReportTable'
 
 class SevaFilters extends Component {
   state = {loading: false, fromDate: '', toDate: '', filterParams: {from: '', to: '', sevaName: ''},  bookingDate: new Date(), sevaList: []}
@@ -61,6 +65,17 @@ class SevaFilters extends Component {
     })
   }
 
+  handleReportDownload = () => {
+    window.html2canvas = html2canvas;
+    const pdf = new jsPDF("l", "pt", "a3");
+    console.log(document.getElementById('FilteredSevas'))
+    pdf.html(document.getElementById('FilteredSevas'), {
+       callback: function (doc) {
+         doc.save();
+       }
+    });
+  }
+
   render () {
     const {fromDate, toDate, bookingDate, sevaList, loading} = this.state
     return (
@@ -98,10 +113,12 @@ class SevaFilters extends Component {
                 </Grid.Column>
                 <Grid.Column>
                   <Button name='cost' onClick={this.getFilteredSevas} fluid placeholder='Amount'> Filter</Button>
+                  <Button onClick={this.handleReportDownload} fluid> Download Report</Button>
                 </Grid.Column>
               </Grid.Row>
             </Grid>
-            <FilteredSevas loading={loading} sevaList={sevaList} />
+            {/*<FilteredSevas loading={loading} sevaList={sevaList} />*/}
+            <DownloadReportTable loading={loading} sevaList={sevaList} />
           </Segment>
         </Container>
       </React.Fragment>

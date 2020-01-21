@@ -153,6 +153,26 @@ const nakshatras = [
    key: 'Revati',
    text: 'Revati',
 
+ },
+ {
+   value: 'Naama',
+   key: 'Naama',
+   text: 'Naama',
+ },
+ {
+   value: 'Mrugashira',
+   key: 'Mrugashira',
+   text: 'Mrugashira',
+ },
+ {
+   value: 'Pubba',
+   key: 'Pubba',
+   text: 'Pubba',
+ },
+ {
+   value: 'Maka',
+   key: 'Maka',
+   text: 'Maka',
  }
 ]
 

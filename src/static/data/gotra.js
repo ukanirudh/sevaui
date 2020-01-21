@@ -888,6 +888,91 @@ const gotras = [
    value: 'Yadav',
    key: 'Yadav',
    text: 'Yadav'
- }
+ },
+ {
+   value: 'Bulan',
+   key: 'Bulan',
+   text: 'Bulan'
+ },
+ {
+   value: 'Lalleri',
+   key: 'Lalleri',
+   text: 'Lalleri'
+ },
+ {
+   value: 'Shiva',
+   key: 'Shiva',
+   text: 'Shiva'
+ },
+ {
+   value: 'Thayall',
+   key: 'Thayall',
+   text: 'Thayall'
+ },
+ {
+   value: 'Palavari',
+   key: 'Palavari',
+   text: 'Palavari'
+ },
+ {
+   value: 'Ulugula',
+   key: 'Ulugula',
+   text: 'Ulugula'
+ },
+ {
+   value: 'YanniKula',
+   key: 'YanniKula',
+   text: 'YanniKula'
+ },
+ {
+   value: 'Puthamanasi',
+   key: 'Puthamanasi',
+   text: 'Puthamanasi'
+ },
+ {
+   value: 'Sripadha',
+   key: 'Sripadha',
+   text: 'Sripadha'
+ },
+ {
+   value: 'Padagasheela',
+   key: 'Padagasheela',
+   text: 'Padagasheela'
+ },
+ {
+   value: 'Atriya',
+   key: 'Atriya',
+   text: 'Atriya'
+ },
+ {
+   value: 'Nabilla',
+   key: 'Nabilla',
+   text: 'Nabilla'
+ },
+ {
+   value: 'Janakara',
+   key: 'Janakara',
+   text: 'Janakara'
+ },
+ {
+   value: 'Ralla',
+   key: 'Ralla',
+   text: 'Ralla'
+ },
+ {
+   value: 'Srilakula',
+   key: 'Srilakula',
+   text: 'Srilakula'
+ },
+ {
+   value: 'Mandikara',
+   key: 'Mandikara',
+   text: 'Mandikara'
+ },
+ {
+   value: 'Mashatkula',
+   key: 'Mashatkula',
+   text: 'Mashatkula'
+ },
 ]
 export default gotras

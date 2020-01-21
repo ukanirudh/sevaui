@@ -3,9 +3,9 @@ import { Form, Container, Segment, Menu, Dropdown, Grid, Button, Message } from 
 import { NavLink } from 'react-router-dom'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
-
 import SevaPrintFormat from './SevaPrintFormat'
 
+/*Constants import*/
 import gotraOptions from '../../static/data/gotra'
 import nakshatrasOptions from '../../static/data/nakshatras'
 import sevas from '../../static/data/sevaTypes'
@@ -13,15 +13,27 @@ import sevas from '../../static/data/sevaTypes'
 
 
 class FormExampleSubcomponentControl extends Component {
-  state = {cost: 0, sevaSubmitted: false, loading: false}
+  state = {cost: 0, sevaSubmitted: false, loading: false, allSevas: sevas, costEditDisbaled: true}
+
+  handleAddition = (e, { name, value }) => {
+    this.setState((prevState) => ({
+      allSevas: [{ text: value, value }, ...prevState.allSevas],
+      [name]: value
+    }))
+  }
 
   handleChange = (e, {name, value }) => this.setState({[name]: value})
 
   handleSevaDateChange = (date) => this.setState({sevaDate: date})
 
-  onSevaSelect = (e, {name, value}) => {
-    const selectedSeva = sevas.filter((seva) => seva.value === value)
-    this.setState({cost: selectedSeva[0].amount, [name]: value})
+  onSevaSelect = (e, data) => {
+    const {name, value} = data
+    const selectedSeva = this.state.allSevas.filter((seva) => seva.value === value)
+    if (selectedSeva[0]) {
+      this.setState({cost: selectedSeva[0].amount, [name]: value, costEditDisbaled: value !== 'donation'})
+    } else {
+      this.setState({costEditDisbaled: false})
+    }
   }
 
   newSeva = () => window.location.reload()
@@ -48,6 +60,7 @@ class FormExampleSubcomponentControl extends Component {
         this.setState({sevaSubmitted: true, loading: false, id: data})
       })
     }
+
     /*For testing purpose, uncomment this*/
     //this.setState({sevaSubmitted: true, loading: false})
   }
@@ -69,7 +82,7 @@ class FormExampleSubcomponentControl extends Component {
   }
 
   render () {
-    const {cost, sevaName, sevaDate, sevaSubmitted, loading} = this.state
+    const {cost, sevaName, sevaDate, sevaSubmitted, loading, costEditDisbaled} = this.state
     return (
     <React.Fragment>
       <Segment inverted>
@@ -96,10 +109,17 @@ class FormExampleSubcomponentControl extends Component {
             <Grid.Row columns={3}>
               <Grid.Column>
                 <label className='form-label-custom'> Seva Name </label>
-                <Dropdown disabled={sevaSubmitted} fluid search selection name='sevaName' onChange={this.onSevaSelect}  label='Seva Name' options={sevas} placeholder='Sevas' />
+                <Dropdown
+                  disabled={sevaSubmitted}
+                  fluid search selection name='sevaName'
+                  onChange={this.onSevaSelect}
+                  label='Seva Name'
+                  allowAdditions
+                  onAddItem={this.handleAddition}
+                  options={this.state.allSevas} placeholder='Sevas' />
               </Grid.Column>
               <Grid.Column>
-                <Form.Input disabled={sevaName !== 'donation'} name='cost' onChange={this.handleChange} fluid label='Amount' placeholder='Amount' value={cost} />
+                <Form.Input disabled={costEditDisbaled} name='cost' onChange={this.handleChange} fluid label='Amount' placeholder='Amount' value={cost} />
               </Grid.Column>
               <Grid.Column>
                 <label className='form-label-custom'> Seva Date </label>

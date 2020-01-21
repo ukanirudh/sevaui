@@ -9,7 +9,7 @@ const SevaHeaders = () => {
          <Table.HeaderCell>Seva Date</Table.HeaderCell>
          <Table.HeaderCell>Payment Date</Table.HeaderCell>
          <Table.HeaderCell>Devotee Name</Table.HeaderCell>
-         <Table.HeaderCell>Phone Number</Table.HeaderCell>
+         {/*<Table.HeaderCell>Phone Number</Table.HeaderCell>*/}
          <Table.HeaderCell>Seva Type</Table.HeaderCell>
        </Table.Row>
      </Table.Header>
@@ -28,7 +28,7 @@ const FilteredSevaList = ({sevaList}) => {
           <Table.Cell> {sevaDate} </Table.Cell>
           <Table.Cell> {paymentDate} </Table.Cell>
           <Table.Cell> {devoteeName} </Table.Cell>
-          <Table.Cell> {contactNum} </Table.Cell>
+          {/*<Table.Cell> {contactNum} </Table.Cell>*/}
           <Table.Cell> {sevaName} </Table.Cell>
         </Table.Row>
       )

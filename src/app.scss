@@ -1,3 +1,14 @@
+.seva-report-segment-header {
+  display: flex;
+  align-items: first baseline;
+  justify-content: space-between;
+
+  .details-text {
+    font-size: medium;
+    font-style: oblique;
+  }
+}
+
 .others-appHeader {
   background-color: black !important;
 }

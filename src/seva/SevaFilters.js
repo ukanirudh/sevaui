@@ -9,9 +9,17 @@ import sevas from '../static/data/sevaTypes'
 import * as jsPDF from 'jspdf'
 import html2canvas from 'html2canvas';
 import DownloadReportTable from './DownloadReportTable'
+// import { testdata } from '../static/data/TestData'
 
 class SevaFilters extends Component {
-  state = {loading: false, fromDate: '', toDate: '', filterParams: {from: '', to: '', sevaName: ''},  bookingDate: new Date(), sevaList: []}
+  state = {
+    loading: false,
+    fromDate: '',
+    toDate: '',
+    filterParams: {from: '', to: '', sevaName: ''},
+    bookingDate: new Date(),
+    sevaList: []
+  }
 
   constructor(props) {
     super(props);
@@ -23,12 +31,14 @@ class SevaFilters extends Component {
     const updatedFilterParams = Object.assign(filterParams, {from})
     this.setState({fromDate: date, filterParams: updatedFilterParams})
   }
+
   handleToChange = (date) => {
     const {filterParams} = this.state
     const to = moment(date).format('YYYY-MM-DD')
     const updatedFilterParams = Object.assign(filterParams, {to})
     this.setState({toDate: date, filterParams: updatedFilterParams})
   }
+
   handleBookingDateChange = (date) => this.setState({bookingDate: date})
 
   onSevaSelect = (e, {value}) => {
@@ -68,7 +78,6 @@ class SevaFilters extends Component {
   handleReportDownload = () => {
     window.html2canvas = html2canvas;
     const pdf = new jsPDF("l", "pt", "a3");
-    console.log(document.getElementById('FilteredSevas'))
     pdf.html(document.getElementById('FilteredSevas'), {
        callback: function (doc) {
          doc.save();
@@ -77,7 +86,7 @@ class SevaFilters extends Component {
   }
 
   render () {
-    const {fromDate, toDate, bookingDate, sevaList, loading} = this.state
+    const {fromDate, toDate, bookingDate, sevaList, loading, filterParams} = this.state
     return (
       <React.Fragment>
         <Segment inverted>
@@ -118,7 +127,7 @@ class SevaFilters extends Component {
               </Grid.Row>
             </Grid>
             {/*<FilteredSevas loading={loading} sevaList={sevaList} />*/}
-            <DownloadReportTable loading={loading} sevaList={sevaList} />
+            <DownloadReportTable loading={loading} sevaList={sevaList} filterParams={filterParams} />
           </Segment>
         </Container>
       </React.Fragment>

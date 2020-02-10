@@ -10,14 +10,19 @@ import gotraOptions from '../../static/data/gotra'
 import nakshatrasOptions from '../../static/data/nakshatras'
 import sevas from '../../static/data/sevaTypes'
 
-
+const mapNameToStateProps = {
+  'gotra': 'allGotras',
+  'nakshatra': 'allNakshatras',
+  'sevaName': 'allSevas'
+}
 
 class FormExampleSubcomponentControl extends Component {
-  state = {cost: 0, sevaSubmitted: false, loading: false, allSevas: sevas, costEditDisbaled: true}
+  state = {cost: 0, sevaSubmitted: false, loading: false, allSevas: sevas, allGotras: gotraOptions, allNakshatras: nakshatrasOptions}
 
   handleAddition = (e, { name, value }) => {
+    const stateElementToBeUpdated = mapNameToStateProps[name]
     this.setState((prevState) => ({
-      allSevas: [{ text: value, value }, ...prevState.allSevas],
+      [stateElementToBeUpdated]: [{ text: value, value }, ...prevState[mapNameToStateProps[name]]],
       [name]: value
     }))
   }
@@ -30,9 +35,7 @@ class FormExampleSubcomponentControl extends Component {
     const {name, value} = data
     const selectedSeva = this.state.allSevas.filter((seva) => seva.value === value)
     if (selectedSeva[0]) {
-      this.setState({cost: selectedSeva[0].amount, [name]: value, costEditDisbaled: value !== 'donation'})
-    } else {
-      this.setState({costEditDisbaled: false})
+      this.setState({cost: selectedSeva[0].amount, [name]: value})
     }
   }
 
@@ -82,13 +85,12 @@ class FormExampleSubcomponentControl extends Component {
   }
 
   render () {
-    const {cost, sevaName, sevaDate, sevaSubmitted, loading, costEditDisbaled} = this.state
+    const {cost, sevaName, sevaDate, sevaSubmitted, loading} = this.state
     return (
     <React.Fragment>
       <Segment inverted>
         <Menu inverted secondary>
           <Menu.Item name='home'> <NavLink to='/seva-billing'>Add Seva</NavLink> </Menu.Item>
-          <Menu.Item name='Events Calendar'> <NavLink to='/events-calendar'>Events Calendar</NavLink> </Menu.Item>
           <Menu.Item name='Seva Reorts'> <NavLink to='/seva-report'>Seva Reorts</NavLink> </Menu.Item>
           <Menu.Item name='Trigger SMS'> <NavLink to='/trigger-sms'>Trigger SMS</NavLink> </Menu.Item>
         </Menu>
@@ -119,7 +121,7 @@ class FormExampleSubcomponentControl extends Component {
                   options={this.state.allSevas} placeholder='Sevas' />
               </Grid.Column>
               <Grid.Column>
-                <Form.Input disabled={costEditDisbaled} name='cost' onChange={this.handleChange} fluid label='Amount' placeholder='Amount' value={cost} />
+                <Form.Input name='cost' onChange={this.handleChange} fluid label='Amount' placeholder='Amount' value={cost} />
               </Grid.Column>
               <Grid.Column>
                 <label className='form-label-custom'> Seva Date </label>
@@ -134,11 +136,35 @@ class FormExampleSubcomponentControl extends Component {
             <Grid.Row columns={3}>
               <Grid.Column>
                 <label className='form-label-custom'> Gotra </label>
-                <Dropdown disabled={sevaSubmitted} search selection onChange={this.handleChange} name='gotra' fluid search label='Gotra' options={gotraOptions} placeholder='Gotra' />
+                <Dropdown
+                  disabled={sevaSubmitted}
+                  search
+                  selection
+                  onChange={this.handleChange}
+                  name='gotra'
+                  fluid
+                  label='Gotra'
+                  options={this.state.allGotras}
+                  placeholder='Gotra'
+                  allowAdditions
+                  onAddItem={this.handleAddition}
+                />
               </Grid.Column>
               <Grid.Column>
                 <label className='form-label-custom'> Nakshatras </label>
-                <Dropdown disabled={sevaSubmitted} search selection onChange={this.handleChange} name='nakshatra' fluid search label='Nakshatras' options={nakshatrasOptions} placeholder='Nakshatras' />
+                <Dropdown
+                  disabled={sevaSubmitted}
+                  search
+                  selection
+                  onChange={this.handleChange}
+                  name='nakshatra'
+                  fluid
+                  label='Nakshatras'
+                  options={this.state.allNakshatras}
+                  placeholder='Nakshatras'
+                  allowAdditions
+                  onAddItem={this.handleAddition}
+                />
               </Grid.Column>
             </Grid.Row>
             <Grid.Row>

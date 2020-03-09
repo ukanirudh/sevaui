@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Container, Segment, Menu, Grid, Button, Message } from 'semantic-ui-react'
-import { NavLink } from 'react-router-dom'
+import { Container, Segment, Grid, Button, Message } from 'semantic-ui-react'
+import AppHeader from './AppHeader'
 
 class TriggerSms extends Component {
   state = {loading: false, smsTriggered: false}
@@ -27,15 +27,7 @@ class TriggerSms extends Component {
     const {smsTriggered, loading} = this.state
     return (
     <React.Fragment>
-      <Segment inverted>
-        <Menu inverted secondary>
-          <Menu.Item name='home'> <NavLink to='/seva-billing'>Add Seva</NavLink> </Menu.Item>
-          <Menu.Item name='Events Calendar'> <NavLink to='/events-calendar'>Events Calendar</NavLink> </Menu.Item>
-          <Menu.Item name='Seva Reorts'> <NavLink to='/seva-report'>Seva Reorts</NavLink> </Menu.Item>
-          <Menu.Item name='Trigger SMS'> <NavLink to='/trigger-sms'>Trigger SMS</NavLink> </Menu.Item>
-        </Menu>
-      </Segment>
-
+      <AppHeader />
       <Container className='main-container'>
         <Segment>
           <Grid centered>

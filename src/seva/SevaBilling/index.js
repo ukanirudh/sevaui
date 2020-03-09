@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { Form, Container, Segment, Menu, Dropdown, Grid, Button, Message } from 'semantic-ui-react'
-import { NavLink } from 'react-router-dom'
+import { Form, Container, Segment, Dropdown, Grid, Button, Message } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
 import SevaPrintFormat from './SevaPrintFormat'
+import AppHeader from '../AppHeader'
 
 /*Constants import*/
 import gotraOptions from '../../static/data/gotra'
@@ -88,13 +88,7 @@ class FormExampleSubcomponentControl extends Component {
     const {cost, sevaName, sevaDate, sevaSubmitted, loading} = this.state
     return (
     <React.Fragment>
-      <Segment inverted>
-        <Menu inverted secondary>
-          <Menu.Item name='home'> <NavLink to='/seva-billing'>Add Seva</NavLink> </Menu.Item>
-          <Menu.Item name='Seva Reorts'> <NavLink to='/seva-report'>Seva Reorts</NavLink> </Menu.Item>
-          <Menu.Item name='Trigger SMS'> <NavLink to='/trigger-sms'>Trigger SMS</NavLink> </Menu.Item>
-        </Menu>
-      </Segment>
+      <AppHeader />
 
       <Container className='main-container'>
         <Segment>

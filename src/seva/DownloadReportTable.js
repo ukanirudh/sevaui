@@ -1,7 +1,7 @@
 import React from 'react'
 import { Header, Table, Dimmer, Loader, Segment } from 'semantic-ui-react'
 import { groupBy } from 'lodash'
-import moment from 'moment'
+import ReportHeader from './AllReport/ReportHeader'
 
 const SevaHeaders = () => {
   return (
@@ -74,10 +74,10 @@ const SevaGroupReportFormat = ({sevaName, sevaDetails}) => {
   )
 }
 
-const FilteredSevas = ({sevaList, loading, filterParams}) => {
+const FilteredSevas = ({filteredList, loading, filterParams, containerID}) => {
   const {from = '', to = ''} = filterParams
-  const groupedData = groupBy(sevaList, 'sevaName')
-  const entriesSevaData = sevaList.length ? Object.entries(groupedData) : []
+  const groupedData = groupBy(filteredList, 'sevaName')
+  const entriesSevaData = filteredList.length ? Object.entries(groupedData) : []
   let renderedSevaReport = null
   if (entriesSevaData.length) {
     renderedSevaReport = entriesSevaData.map((entrySeva) => {
@@ -86,13 +86,9 @@ const FilteredSevas = ({sevaList, loading, filterParams}) => {
     })
   }
   return (
-    <div id='FilteredSevas'>
+    <div id={containerID}>
       <Segment>
-        <div className='seva-report-segment-header'>
-          <p className='details-text'>{`${from && moment(from).format('DD-MM-YYYY')} -- ${to && moment(to).format('DD-MM-YYYY')}`}</p>
-          <h2> Seva Report </h2>
-          <p className='details-text'>{`Report Date: ${moment().format('Do MMMM YYYY')}`}</p>
-        </div>
+        <ReportHeader from={from} to={to} headerText={'Seva Report'} />
         <Table celled padded>
           <SevaHeaders />
           {!entriesSevaData.length && <Table.Row> No sevas to display </Table.Row>}

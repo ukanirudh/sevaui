@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
-import { Grid, Container, Segment, Menu, Dropdown, Button, Header, Table } from 'semantic-ui-react'
+import { Grid, Container, Segment, Menu, Dropdown, Button, Header } from 'semantic-ui-react'
 import { NavLink } from 'react-router-dom'
 import DatePicker from "react-datepicker";
-//import FilteredSevas from './FilteredTable'
 import moment from 'moment'
 import sevas from '../static/data/sevaTypes'
 
 import * as jsPDF from 'jspdf'
 import html2canvas from 'html2canvas';
 import DownloadReportTable from './DownloadReportTable'
+import AppHeader from './AppHeader'
+
+//import FilteredSevas from './FilteredTable'
 // import { testdata } from '../static/data/TestData'
 
 class SevaFilters extends Component {
@@ -89,14 +91,7 @@ class SevaFilters extends Component {
     const {fromDate, toDate, bookingDate, sevaList, loading, filterParams} = this.state
     return (
       <React.Fragment>
-        <Segment inverted>
-          <Menu inverted secondary>
-            <Menu.Item name='home'> <NavLink to="/seva-billing">Add Seva</NavLink> </Menu.Item>
-            <Menu.Item name='Events Calendar'> <NavLink to="/events-calendar">Events Calendar</NavLink> </Menu.Item>
-            <Menu.Item name='Seva Reorts'> <NavLink to="/seva-report">Seva Reorts</NavLink> </Menu.Item>
-            <Menu.Item name='Trigger SMS'> <NavLink to='/trigger-sms'>Trigger SMS</NavLink> </Menu.Item>
-          </Menu>
-        </Segment>
+        <AppHeader />
 
         <Container>
           <Segment>

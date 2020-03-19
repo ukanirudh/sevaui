@@ -8,7 +8,6 @@ import AppHeader from '../AppHeader'
 /*Constants import*/
 import gotraOptions from '../../static/data/gotra'
 import nakshatrasOptions from '../../static/data/nakshatras'
-import sevas from '../../static/data/sevaTypes'
 
 const mapNameToStateProps = {
   'gotra': 'allGotras',
@@ -16,16 +15,39 @@ const mapNameToStateProps = {
   'sevaName': 'allSevas'
 }
 
-class FormExampleSubcomponentControl extends Component {
-  state = {cost: 0, sevaSubmitted: false, loading: false, allSevas: sevas, allGotras: gotraOptions, allNakshatras: nakshatrasOptions}
+const getSevaOption = ({sevaName, sevaLabel}) => ({
+  value: sevaName,
+  key: sevaName,
+  text: sevaLabel,
+})
 
-  handleAddition = (e, { name, value }) => {
-    const stateElementToBeUpdated = mapNameToStateProps[name]
-    this.setState((prevState) => ({
-      [stateElementToBeUpdated]: [{ text: value, value }, ...prevState[mapNameToStateProps[name]]],
-      [name]: value
-    }))
+class FormExampleSubcomponentControl extends Component {
+  state = {cost: 0, sevaSubmitted: false, loading: false, allSevas: [], allGotras: gotraOptions, allNakshatras: nakshatrasOptions}
+
+  componentDidMount () {
+    fetch('http://localhost:8085/SevaBilling/rest/Service/sevatype', {
+      method: 'GET',
+      headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+      }
+    }).then((response) => response.json()).then((response) => {
+      console.log(response)
+      const sevaOptions = response.map((seva) => {
+        const {sevaName, sevaLabel} = seva
+        return getSevaOption({sevaName, sevaLabel})
+      });
+      this.setState({allSevas: sevaOptions})
+    })
   }
+
+  // handleAddition = (e, { name, value }) => {
+  //   const stateElementToBeUpdated = mapNameToStateProps[name]
+  //   this.setState((prevState) => ({
+  //     [stateElementToBeUpdated]: [{ text: value, value }, ...prevState[mapNameToStateProps[name]]],
+  //     [name]: value
+  //   }))
+  // }
 
   handleChange = (e, {name, value }) => this.setState({[name]: value})
 
@@ -33,10 +55,11 @@ class FormExampleSubcomponentControl extends Component {
 
   onSevaSelect = (e, data) => {
     const {name, value} = data
-    const selectedSeva = this.state.allSevas.filter((seva) => seva.value === value)
-    if (selectedSeva[0]) {
-      this.setState({cost: selectedSeva[0].amount, [name]: value})
-    }
+    this.setState({[name]: value})
+    // const selectedSeva = this.state.allSevas.filter((seva) => seva.value === value)
+    // if (selectedSeva[0]) {
+    //   this.setState({cost: selectedSeva[0].amount, [name]: value})
+    // }
   }
 
   newSeva = () => window.location.reload()
@@ -110,8 +133,6 @@ class FormExampleSubcomponentControl extends Component {
                   fluid search selection name='sevaName'
                   onChange={this.onSevaSelect}
                   label='Seva Name'
-                  allowAdditions
-                  onAddItem={this.handleAddition}
                   options={this.state.allSevas} placeholder='Sevas' />
               </Grid.Column>
               <Grid.Column>

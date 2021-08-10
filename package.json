@@ -40,10 +40,10 @@
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.88.2",
     "style-loader": "^0.22.1",
-    "uglifyjs-webpack-plugin": "^2.1.2",
+    "uglifyjs-webpack-plugin": "^1.1.2",
     "webpack": "^4.16.5",
     "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.14"
+    "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
     "babel-plugin-import": "^1.8.0",
@@ -52,11 +52,11 @@
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
     "html2canvas": "^1.0.0-rc.5",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.3.1",
     "less": "^3.8.1",
     "less-loader": "^4.1.0",
     "lodash": "^4.17.15",
-    "node-sass": "^4.11.0",
+    "node-sass": "^6.0.1",
     "react": "^16.4.2",
     "react-datepicker": "^2.8.0",
     "react-dom": "^16.4.2",

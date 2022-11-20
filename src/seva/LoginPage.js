@@ -1,23 +1,25 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import { Form, Container, Segment, Button, Message } from 'semantic-ui-react'
+import { useNavigate } from "react-router-dom";
 
-class LoginPage extends Component {
-  state = {username: 0, userpassword: false, loginError: false}
+const LoginPage = () => {
+  const [loginState, setLoginState] = useState({username: '', userpassword: '', loginError: false});
+  const navigate = useNavigate();
 
-  handleChange = (e, {name, value }) => this.setState({[name]: value, loginError: false})
+  const handleChange = (e, {name, value }) => setLoginState({...loginState, [name]: value, loginError: false})
 
-  submitSeva = (e) => {
+  const submitSeva = (e) => {
+    
+
     e.preventDefault()
-    const {username, userpassword} = this.state
+    const {username, userpassword} = loginState
     if ( username === 'admin' && userpassword === 'admin') {
-      this.props.history.push('/seva-billing')
+      navigate('/seva-billing')
     } else {
-      this.setState({loginError: true})
+      setLoginState({...loginState, loginError: true})
     }
   }
 
-  render () {
-    const {loginError} = this.state
     return (
     <React.Fragment>
       <Container className='main-container'>
@@ -25,16 +27,16 @@ class LoginPage extends Component {
         <h2>Login</h2>
         <Form>
           <Form.Field>
-            <Form.Input name='username' onChange={this.handleChange} fluid label='Username' placeholder='Enter the username' />
+            <Form.Input name='username' onChange={handleChange} fluid label='Username' placeholder='Enter the username' />
           </Form.Field>
           <Form.Field>
-            <Form.Input type='password' name='userpassword' onChange={this.handleChange} fluid label='Password' placeholder='Enter the password' />
+            <Form.Input type='password' name='userpassword' onChange={handleChange} fluid label='Password' placeholder='Enter the password' />
           </Form.Field>
 
-          <Button primary onClick={this.submitSeva} type='submit'>Submit</Button>
+          <Button primary onClick={submitSeva} type='submit'>Submit</Button>
 
           {
-            loginError &&
+            loginState.loginError &&
               <Message negative>
                 <Message.Header>Login unsuccessful. Please contact Admin for more details</Message.Header>
               </Message>
@@ -45,7 +47,7 @@ class LoginPage extends Component {
       </Container>
     </React.Fragment>
     )
-  }
+  
 }
 
 export default LoginPage

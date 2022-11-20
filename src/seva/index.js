@@ -1,12 +1,12 @@
 import React from 'react'
 import { TradingApp } from './App'
-import { HashRouter } from "react-router-dom";
+import {   BrowserRouter } from "react-router-dom";
 
 const trading = () => {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <TradingApp />
-    </HashRouter>
+    </BrowserRouter>
   )
 }
 

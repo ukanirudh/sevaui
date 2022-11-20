@@ -9,12 +9,6 @@ export function setCurrentEntityUuid (payload) {
   return {type: SET_CURRENT_MEETING_UUID, payload}
 }
 
-export function canSwapRoom () {
-  return (dispatch, getState) => {
-    dispatch(setOrResetSelectedRoom(selectedRoom))
-  }
-}
-
 
 export default function reducer (state = INITIAL_STATE, action = {}) {
   const {payload} = action

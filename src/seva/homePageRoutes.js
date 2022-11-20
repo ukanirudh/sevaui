@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Switch } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import SevaBilling from './SevaBilling'
 import EventsCalendar from './EventsCalendar'
 import LoginPage from './LoginPage'
@@ -11,16 +11,16 @@ import AddSevaType from './AddSevaType'
 
 const HomePageRoutes = () => {
   return (
-    <Switch>
-      <Route exact path="/" component={LoginPage} />
-      <Route path="/seva-billing" component={SevaBilling} />
-      <Route path="/events-calendar" component={EventsCalendar} />
-      <Route path="/trigger-sms" component={TriggerSms} />
-      <Route path="/expenses" component={Expenses} />
-      <Route path="/shashwatha-seva" component={ShaswathaSeva} />
-      <Route path="/all-reports" component={AllReport} />
-      <Route path="/add-seva-type" component={AddSevaType} />
-    </Switch>
+    <Routes>
+      <Route exact path="/" element={<LoginPage />} />
+      <Route path="/seva-billing" element={<SevaBilling />} />
+      <Route path="/events-calendar" element={<EventsCalendar />} />
+      <Route path="/trigger-sms" element={<TriggerSms />} />
+      <Route path="/expenses" element={<Expenses />} />
+      <Route path="/shashwatha-seva" element={<ShaswathaSeva />} />
+      <Route path="/all-reports" element={<AllReport />} />
+      <Route path="/add-seva-type" element={<AddSevaType />} />
+    </Routes>
   )
 }
 

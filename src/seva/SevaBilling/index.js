@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useState, useEffect } from 'react'
 import { Form, Container, Segment, Dropdown, Grid, Button, Message } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
@@ -9,89 +9,103 @@ import AppHeader from '../AppHeader'
 import gotraOptions from '../../static/data/gotra'
 import nakshatrasOptions from '../../static/data/nakshatras'
 
+import {collection, orderBy, getDocs, addDoc } from "firebase/firestore"
+import {db} from '../../firebaseConfigs';
+
 const mapNameToStateProps = {
   'gotra': 'allGotras',
   'nakshatra': 'allNakshatras',
   'sevaName': 'allSevas'
 }
 
-const getSevaOption = ({sevaName, sevaLabel}) => ({
+const getSevaOption = ({sevaName, sevaLabel, amount}) => ({
   value: sevaName,
   key: sevaName,
   text: sevaLabel,
+  amount
 })
 
-class FormExampleSubcomponentControl extends Component {
-  state = {cost: 0, sevaSubmitted: false, loading: false, allSevas: [], allGotras: gotraOptions, allNakshatras: nakshatrasOptions}
+const CreateSeva = () => {
+  const [sevaSubmitted, setSevaSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [allSevas, setAllSevas] = useState([]);
+  const [allGotras, setAllGotras] = useState(gotraOptions);
+  const [allNakshatras, setAllNakshatras] = useState(nakshatrasOptions);
+  const [formData, setFormData] = useState({amount: 0});
+  const [ sevaID, setDevaID ] = useState(null);
 
-  componentDidMount () {
-    fetch('http://localhost:8085/SevaBilling/rest/Service/sevatype', {
-      method: 'GET',
-      headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-      }
-    }).then((response) => response.json()).then((response) => {
-      console.log(response)
-      const sevaOptions = response.map((seva) => {
-        const {sevaName, sevaLabel} = seva
-        return getSevaOption({sevaName, sevaLabel})
+  useEffect(() => {
+    const getSevaType = async () => {
+      const taskColRef = await getDocs(collection(db, 'sevaType'), orderBy('created', 'desc'))
+      let allSevasFetched = []
+      taskColRef.forEach((doc) => {
+        allSevasFetched.push(getSevaOption(doc.data()));
       });
-      this.setState({allSevas: sevaOptions})
-    })
+      setAllSevas(allSevasFetched);
+    }
+    getSevaType();
+  }, [])
+
+
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     const taskColRef = await getDocs(collection(db, 'sevas'), orderBy('created', 'desc'))
+  //     console.log("taskColRef", taskColRef);
+  //     taskColRef.forEach((doc) => {
+  //       console.log(`${doc.id} => ${doc.data()}`);
+  //     });
+  //   }
+
+  //   getData();
+  // }, [])
+
+  const handleGotraAddtion = (e, { name, value }) => {
+    setAllGotras([...allGotras, { text: value, value }])
+    setFormData({...formData, [name]: value})
   }
 
-  // handleAddition = (e, { name, value }) => {
-  //   const stateElementToBeUpdated = mapNameToStateProps[name]
-  //   this.setState((prevState) => ({
-  //     [stateElementToBeUpdated]: [{ text: value, value }, ...prevState[mapNameToStateProps[name]]],
-  //     [name]: value
-  //   }))
-  // }
+  const handleNakshatraAddtion = (e, { name, value }) => {
+    setAllNakshatras([...allNakshatras, { text: value, value }])
+    setFormData({...formData, [name]: value})
 
-  handleChange = (e, {name, value }) => this.setState({[name]: value})
-
-  handleSevaDateChange = (date) => this.setState({sevaDate: date})
-
-  onSevaSelect = (e, data) => {
-    const {name, value} = data
-    this.setState({[name]: value})
-    // const selectedSeva = this.state.allSevas.filter((seva) => seva.value === value)
-    // if (selectedSeva[0]) {
-    //   this.setState({cost: selectedSeva[0].amount, [name]: value})
-    // }
   }
 
-  newSeva = () => window.location.reload()
+  const handleChange = (e, {name, value }) => setFormData({...formData, [name]: value})
 
-  submitSeva = (e) => {
+  const handleSevaDateChange = (date) => setFormData({...formData, sevaDate: date})
+
+  const onSevaSelect = (e, data) => {
+    const {name, value} = data;
+    setFormData({...formData, [name]: value})
+    const selectedSeva = allSevas.filter((seva) => seva.value === value)
+    if (selectedSeva[0]) {
+      setFormData({...formData, amount: selectedSeva[0].amount})
+    }
+  }
+
+  const newSeva = () => window.location.reload()
+
+  const submitSeva = async (e) => {
     e.preventDefault()
-    const {sevaDate, sevaSubmitted} = this.state
+    const {sevaDate} = formData;
     const sevaDateFormatted = moment(sevaDate).format('YYYY-MM-DD')
-    let sevaData = {...this.state}
+    let sevaData = {...formData}
     sevaData = Object.assign(sevaData, {sevaDate: sevaDateFormatted})
     console.log(sevaData)
 
-    this.setState({loading: true})
-    if (!sevaSubmitted) {
-      fetch('http://localhost:8085/SevaBilling/rest/Service/seva', {
-        method: 'POST',
-        headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(sevaData)
-      }).then((response) => response.json()).then((response) => {
-        const {data} = response
-        this.setState({sevaSubmitted: true, loading: false, id: data})
-      })
-    }
+    setLoading(true);
 
-    /*For testing purpose, uncomment this*/
-    //this.setState({sevaSubmitted: true, loading: false})
+    try {
+      const docRef = await addDoc(collection(db, 'sevas'), sevaData)
+      setSevaSubmitted(true);
+      setDevaID(docRef.id);
+    } catch (err) {
+      console.log(err);
+    }
+    setLoading(false);
   }
 
-  renderPrintPage = () => {
+  const renderPrintPage = () => {
     var content = document.getElementById("divcontents");
     var pri = document.getElementById("ifmcontentstoprint").contentWindow;
     pri.document.open();
@@ -107,8 +121,7 @@ class FormExampleSubcomponentControl extends Component {
     pri.print();
   }
 
-  render () {
-    const {cost, sevaName, sevaDate, sevaSubmitted, loading} = this.state
+
     return (
     <React.Fragment>
       <AppHeader />
@@ -118,10 +131,10 @@ class FormExampleSubcomponentControl extends Component {
           <Grid>
             <Grid.Row columns={2}>
               <Grid.Column>
-                <Form.Input disabled={sevaSubmitted} name='devoteeName' onChange={this.handleChange} fluid label='Name of the Devotee' placeholder='Name of the Devotee' />
+                <Form.Input disabled={sevaSubmitted} name='devoteeName' onChange={handleChange} fluid label='Name of the Devotee' placeholder='Name of the Devotee' />
               </Grid.Column>
               <Grid.Column>
-                <Form.Input disabled={sevaSubmitted} name='contactNum' onChange={this.handleChange} fluid label='Contact Number' placeholder='Contact Number' />
+                <Form.Input disabled={sevaSubmitted} name='contactNum' onChange={handleChange} fluid label='Contact Number' placeholder='Contact Number' />
               </Grid.Column>
             </Grid.Row>
 
@@ -131,19 +144,19 @@ class FormExampleSubcomponentControl extends Component {
                 <Dropdown
                   disabled={sevaSubmitted}
                   fluid search selection name='sevaName'
-                  onChange={this.onSevaSelect}
+                  onChange={onSevaSelect}
                   label='Seva Name'
-                  options={this.state.allSevas} placeholder='Sevas' />
+                  options={allSevas} placeholder='Sevas' />
               </Grid.Column>
               <Grid.Column>
-                <Form.Input name='cost' onChange={this.handleChange} fluid label='Amount' placeholder='Amount' value={cost} />
+                <Form.Input name='amount' onChange={handleChange} fluid label='Amount' placeholder='Amount' value={formData.amount} />
               </Grid.Column>
               <Grid.Column>
                 <label className='form-label-custom'> Seva Date </label>
                 <DatePicker
                   disabled={sevaSubmitted}
-                  selected={sevaDate}
-                  onChange={this.handleSevaDateChange}
+                  selected={formData.sevaDate}
+                  onChange={handleSevaDateChange}
                 />
               </Grid.Column>
             </Grid.Row>
@@ -155,14 +168,14 @@ class FormExampleSubcomponentControl extends Component {
                   disabled={sevaSubmitted}
                   search
                   selection
-                  onChange={this.handleChange}
+                  onChange={handleChange}
                   name='gotra'
                   fluid
                   label='Gotra'
-                  options={this.state.allGotras}
+                  options={allGotras}
                   placeholder='Gotra'
                   allowAdditions
-                  onAddItem={this.handleAddition}
+                  onAddItem={handleGotraAddtion}
                 />
               </Grid.Column>
               <Grid.Column>
@@ -171,21 +184,21 @@ class FormExampleSubcomponentControl extends Component {
                   disabled={sevaSubmitted}
                   search
                   selection
-                  onChange={this.handleChange}
+                  onChange={handleChange}
                   name='nakshatra'
                   fluid
                   label='Nakshatras'
-                  options={this.state.allNakshatras}
+                  options={allNakshatras}
                   placeholder='Nakshatras'
                   allowAdditions
-                  onAddItem={this.handleAddition}
+                  onAddItem={handleNakshatraAddtion}
                 />
               </Grid.Column>
             </Grid.Row>
             <Grid.Row>
               <Grid.Column>
-                {sevaSubmitted ? <Button primary onClick={this.newSeva}>Create New Seva</Button> : <Button loading={loading} primary onClick={this.submitSeva}>Submit</Button>}
-                {sevaSubmitted && <Button onClick={this.renderPrintPage}> Print Seva Ticket </Button>}
+                {sevaSubmitted ? <Button primary onClick={newSeva}>Create New Seva</Button> : <Button loading={loading} primary onClick={submitSeva}>Submit</Button>}
+                {sevaSubmitted && <Button onClick={renderPrintPage}> Print Seva Ticket </Button>}
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -199,7 +212,7 @@ class FormExampleSubcomponentControl extends Component {
 
           <div style={{display: 'none'}}>
             <iframe id="ifmcontentstoprint" className={`container print-container`}>
-              <SevaPrintFormat printData={this.state} />
+              <SevaPrintFormat printData={{...formData, id: sevaID}} />
             </iframe>
           </div>
 
@@ -207,7 +220,7 @@ class FormExampleSubcomponentControl extends Component {
       </Container>
     </React.Fragment>
     )
-  }
+
 }
 
-export default FormExampleSubcomponentControl
+export default CreateSeva

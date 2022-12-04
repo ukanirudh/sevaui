@@ -10,6 +10,9 @@ import DownloadReportTable from '../DownloadReportTable'
 import ExpenseReport from './ExpenseReport'
 import { ReportTypes, ALL_REPORT_ID, Apis } from '../constants'
 
+import {collection, orderBy, getDocs, query, where } from "firebase/firestore"
+import {db} from '../../firebaseConfigs';
+
 class AllReport extends Component {
   state = {
     loading: false,
@@ -19,6 +22,22 @@ class AllReport extends Component {
     filterParams: {from: '', to: '', sevaName: ''},
     bookingDate: new Date(),
     filteredList: []
+  }
+
+  componentDidMount() {
+    // const getData = async () => {
+    //   const q = query(collection(db, "sevas"), where("sevaDate", "<=", "2022-12-21"));
+
+    //   // const taskColRef = await getDocs(collection(db, 'sevas'))
+    //   const taskColRef = await getDocs(q)
+    //   console.log("taskColRef", taskColRef);
+    //   taskColRef.forEach((doc) => {
+    //     console.log(doc.id)
+    //     console.log(doc.data())
+    //   });
+    // }
+
+    // getData();
   }
 
   constructor(props) {

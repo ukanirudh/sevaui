@@ -1,3 +1,7 @@
+.margin-t-1em {
+  margin-top: 1em;
+}
+
 .seva-report-segment-header {
   display: flex;
   align-items: first baseline;
@@ -28,7 +32,13 @@
 }
 
 .main-container {
+  display: flex !important;
+  height: 100%;
+  align-items: center;
 
+  .login-segment {
+    flex: 1;
+  }
 }
 
 #root {

@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Form, Container, Segment, Dropdown, Grid, Button, Message } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
@@ -9,21 +9,9 @@ import AppHeader from '../AppHeader'
 import gotraOptions from '../../static/data/gotra'
 import nakshatrasOptions from '../../static/data/nakshatras'
 
-import {collection, orderBy, getDocs, addDoc } from "firebase/firestore"
-import {db} from '../../firebaseConfigs';
-
-const mapNameToStateProps = {
-  'gotra': 'allGotras',
-  'nakshatra': 'allNakshatras',
-  'sevaName': 'allSevas'
-}
-
-const getSevaOption = ({sevaName, sevaLabel, amount}) => ({
-  value: sevaName,
-  key: sevaName,
-  text: sevaLabel,
-  amount
-})
+import { getSevaOption } from '../utils';
+import { collection, getDocs, addDoc } from "firebase/firestore"
+import { db, SEVA_ENDPOINT, SEVA_TYPE_ENDPOINT } from '../../firebaseConfigs';
 
 const CreateSeva = () => {
   const [sevaSubmitted, setSevaSubmitted] = useState(false);
@@ -36,7 +24,7 @@ const CreateSeva = () => {
 
   useEffect(() => {
     const getSevaType = async () => {
-      const taskColRef = await getDocs(collection(db, 'sevaType'), orderBy('created', 'desc'))
+      const taskColRef = await getDocs(collection(db, SEVA_TYPE_ENDPOINT))
       let allSevasFetched = []
       taskColRef.forEach((doc) => {
         allSevasFetched.push(getSevaOption(doc.data()));
@@ -45,19 +33,6 @@ const CreateSeva = () => {
     }
     getSevaType();
   }, [])
-
-
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     const taskColRef = await getDocs(collection(db, 'sevas'), orderBy('created', 'desc'))
-  //     console.log("taskColRef", taskColRef);
-  //     taskColRef.forEach((doc) => {
-  //       console.log(`${doc.id} => ${doc.data()}`);
-  //     });
-  //   }
-
-  //   getData();
-  // }, [])
 
   const handleGotraAddtion = (e, { name, value }) => {
     setAllGotras([...allGotras, { text: value, value }])
@@ -76,10 +51,9 @@ const CreateSeva = () => {
 
   const onSevaSelect = (e, data) => {
     const {name, value} = data;
-    setFormData({...formData, [name]: value})
     const selectedSeva = allSevas.filter((seva) => seva.value === value)
     if (selectedSeva[0]) {
-      setFormData({...formData, amount: selectedSeva[0].amount})
+      setFormData({...formData, [name]: value, amount: selectedSeva[0].amount})
     }
   }
 
@@ -96,7 +70,7 @@ const CreateSeva = () => {
     setLoading(true);
 
     try {
-      const docRef = await addDoc(collection(db, 'sevas'), sevaData)
+      const docRef = await addDoc(collection(db, SEVA_ENDPOINT), sevaData)
       setSevaSubmitted(true);
       setDevaID(docRef.id);
     } catch (err) {
@@ -126,7 +100,7 @@ const CreateSeva = () => {
     <React.Fragment>
       <AppHeader />
 
-      <Container className='main-container'>
+      <Container className=''>
         <Segment>
           <Grid>
             <Grid.Row columns={2}>
@@ -143,7 +117,10 @@ const CreateSeva = () => {
                 <label className='form-label-custom'> Seva Name </label>
                 <Dropdown
                   disabled={sevaSubmitted}
-                  fluid search selection name='sevaName'
+                  fluid
+                  search
+                  selection
+                  name='sevaName'
                   onChange={onSevaSelect}
                   label='Seva Name'
                   options={allSevas} placeholder='Sevas' />

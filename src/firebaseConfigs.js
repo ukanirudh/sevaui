@@ -27,4 +27,8 @@ signInAnonymously(getAuth(app)).catch(function(error) {
 
 const db = getFirestore(app)
 
-export {db}
+const SEVA_ENDPOINT = 'sevas';
+const EXPENSES_ENDPOINT = 'expenses';
+const SEVA_TYPE_ENDPOINT = 'sevaType'
+
+export { db, SEVA_ENDPOINT, EXPENSES_ENDPOINT, SEVA_TYPE_ENDPOINT }

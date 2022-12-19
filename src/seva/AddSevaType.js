@@ -1,40 +1,37 @@
-import React, {useState, useCallback} from 'react'
-import { Form, Container, Segment, Dropdown, Grid, Button, Message } from 'semantic-ui-react'
+import React, {useState} from 'react'
+import { Form, Container, Segment, Grid, Button, Message } from 'semantic-ui-react'
 import AppHeader from './AppHeader'
+
+import { collection, addDoc } from "firebase/firestore"
+import { db, SEVA_TYPE_ENDPOINT } from '../firebaseConfigs';
 
 const toSnakeCase = str => str && str
   .match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
   .map(x => x.toLowerCase())
   .join('-');
 
-const createSevaType = ({sevaType}, {toggleLoading, toggleSevaSubmitted}) => {
-  const sevaTypeData = {
-    sevaName: toSnakeCase(sevaType),
-    sevaLabel: sevaType
-  }
-  toggleLoading()
-  toggleSevaSubmitted()
-  fetch('http://localhost:8085/SevaBilling/rest/Service/sevatype', {
-    method: 'POST',
-    headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(sevaTypeData)
-  }).then((response) => response.json()).then((response) => {
-    toggleLoading()
-  }).catch(() => {
-    toggleLoading()
-  })
-}
-
 const AddSevaType = () => {
     const [sevaObj, setSevaObj] = useState({});
     const [loading, setLoading] = useState(false)
     const [sevaSubmitted, setSevaSubmitted] = useState(false)
 
-    const toggleSevaSubmitted = useCallback(() => setSevaSubmitted(!sevaSubmitted), [sevaSubmitted]);
-    const toggleLoading = useCallback(() => setLoading(!loading), [loading]);
+    const createSevaType = async () => {
+      const {sevaType} = sevaObj;
+      const sevaTypeData = {
+        sevaName: toSnakeCase(sevaType),
+        sevaLabel: sevaType
+      }
+      setLoading(prev => !prev);
+      setSevaSubmitted(prev => !prev);
+    
+      try {
+        await addDoc(collection(db, SEVA_TYPE_ENDPOINT), sevaTypeData);
+      } catch (err) {
+        console.log(err);
+      }
+      setLoading(prev => !prev);
+    }
+
     return (
       <React.Fragment>
         <AppHeader />
@@ -52,7 +49,9 @@ const AddSevaType = () => {
                 </Grid.Column>
               </Grid.Row>
               <Grid.Row columns={2}>
-                <Button disabled={sevaSubmitted} loading={loading} padded onClick={(e) => createSevaType(sevaObj, {toggleLoading, toggleSevaSubmitted})}>Submit</Button>
+              <Grid.Column>
+                <Button disabled={sevaSubmitted} loading={loading} onClick={createSevaType}>Submit</Button>
+              </Grid.Column>
               </Grid.Row>
             </Grid>
           </Segment>

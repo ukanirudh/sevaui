@@ -1,4 +1,4 @@
-import * as jsPDF from 'jspdf'
+import { jsPDF } from 'jspdf'
 import html2canvas from 'html2canvas';
 
 export const handleReportDownload = (tableID) => {
@@ -10,3 +10,11 @@ export const handleReportDownload = (tableID) => {
      }
   });
 }
+
+
+export const getSevaOption = ({sevaName, sevaLabel, amount}) => ({
+  value: sevaName,
+  key: sevaName,
+  text: sevaLabel,
+  amount
+})

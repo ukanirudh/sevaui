@@ -4,6 +4,9 @@ import DatePicker from 'react-datepicker'
 import moment from 'moment'
 import AppHeader from '../AppHeader'
 
+import { collection, addDoc } from "firebase/firestore"
+import { db, EXPENSES_ENDPOINT } from '../../firebaseConfigs';
+
 class Expenses extends Component {
   state = {amount: 0, sevaSubmitted: false, loading: false, description: '', paidTo: ''}
 
@@ -13,27 +16,24 @@ class Expenses extends Component {
 
   newSeva = () => window.location.reload()
 
-  submitSeva = (e) => {
+  submitSeva = async (e) => {
     e.preventDefault()
     const {paymentDate, sevaSubmitted, description, paidTo, amount} = this.state
     const paymentDateFormatted = moment(paymentDate).format('YYYY-MM-DD')
-    const sevaData = Object.assign({}, {paymentDate: paymentDateFormatted, description, paidTo, amount: parseFloat(amount)})
-    // sevaData = Object.assign(sevaData, {paymentDate: paymentDateFormatted})
-    console.log(sevaData)
+    const expenseData = Object.assign({}, {paymentDate: paymentDateFormatted, description, paidTo, amount: parseFloat(amount)})
+    // console.log(expenseData)
 
     this.setState({loading: true})
+    
     if (!sevaSubmitted) {
-      fetch('http://localhost:8085/SevaBilling/rest/Service/expenses', {
-        method: 'POST',
-        headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(sevaData)
-      }).then((response) => response.json()).then((response) => {
-        const {data} = response
-        this.setState({sevaSubmitted: true, loading: false, id: data})
-      })
+      try {
+        const docRef = await addDoc(collection(db, EXPENSES_ENDPOINT), expenseData)
+      } catch (err) {
+        console.log(err);
+      }
+  
+      this.setState({sevaSubmitted: true, loading: false})
+      
     }
 
     /*For testing purpose, uncomment this*/
@@ -46,7 +46,7 @@ class Expenses extends Component {
     <React.Fragment>
       <AppHeader />
 
-      <Container className='main-container'>
+      <Container className=''>
         <Segment>
           <Grid>
             <Grid.Row columns={2}>
@@ -60,7 +60,15 @@ class Expenses extends Component {
 
             <Grid.Row columns={2}>
               <Grid.Column>
-                <Form.Input type='number' name='amount' onChange={this.handleChange} fluid label='Amount' placeholder='Amount' value={amount} />
+                <Form.Input
+                  type='number'
+                  name='amount'
+                  disabled={sevaSubmitted}
+                  onChange={this.handleChange} 
+                  fluid label='Amount'
+                  placeholder='Amount'
+                  value={amount}
+                />
               </Grid.Column>
               <Grid.Column>
                 <label className='form-label-custom'> Payment Date </label>

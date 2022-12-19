@@ -23,7 +23,7 @@ const LoginPage = () => {
     return (
     <React.Fragment>
       <Container className='main-container'>
-        <Segment>
+        <Segment className='login-segment'>
         <h2>Login</h2>
         <Form>
           <Form.Field>

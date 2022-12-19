@@ -22,7 +22,7 @@ const FilteredSevaList = ({filteredList}) => {
     renderedSevaItems = newFilteredList.map((seva) => {
       const {paidTo, id, description, amount, paymentDate} = seva
       return (
-        <Table.Row id={id}>
+        <Table.Row key={id}>
           <Table.Cell width={4}> {paidTo} </Table.Cell>
           <Table.Cell width={4}> {description} </Table.Cell>
           <Table.Cell width={4}> {amount} </Table.Cell>
@@ -45,7 +45,7 @@ const FilteredSevaList = ({filteredList}) => {
 const ExpenseReport = ({filteredList, loading, filterParams, containerID}) => {
   const {from = '', to = ''} = filterParams
   return (
-    <div id={containerID}>
+    <div className='margin-t-1em' id={containerID}>
       <Segment>
         <ReportHeader from={from} to={to} headerText={'Expense Report'} />
         <Table celled padded>

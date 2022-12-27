@@ -16,10 +16,11 @@ const AddSevaType = () => {
     const [sevaSubmitted, setSevaSubmitted] = useState(false)
 
     const createSevaType = async () => {
-      const {sevaType} = sevaObj;
+      const {sevaType, amount} = sevaObj;
       const sevaTypeData = {
         sevaName: toSnakeCase(sevaType),
-        sevaLabel: sevaType
+        sevaLabel: sevaType,
+        amount
       }
       setLoading(prev => !prev);
       setSevaSubmitted(prev => !prev);
@@ -45,12 +46,15 @@ const AddSevaType = () => {
               </Grid.Row>
               <Grid.Row columns={2}>
                 <Grid.Column>
-                  <Form.Input name='sevaType' onChange={(e, {name, value}) => setSevaObj({[name]: value}) } fluid label='Seva Type' placeholder='Seva Type' />
+                  <Form.Input name='sevaType' onChange={(e, {name, value}) => setSevaObj({...sevaObj, [name]: value}) } fluid label='Seva Type' placeholder='Seva Type' />
+                </Grid.Column>
+                <Grid.Column>
+                  <Form.Input name='amount' onChange={(e, {name, value}) => setSevaObj({...sevaObj, [name]: value}) } fluid label='Amount' placeholder='Amount' />
                 </Grid.Column>
               </Grid.Row>
               <Grid.Row columns={2}>
               <Grid.Column>
-                <Button disabled={sevaSubmitted} loading={loading} onClick={createSevaType}>Submit</Button>
+                <Button primary disabled={sevaSubmitted} loading={loading} onClick={createSevaType}>Submit</Button>
               </Grid.Column>
               </Grid.Row>
             </Grid>

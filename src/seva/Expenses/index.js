@@ -18,10 +18,9 @@ class Expenses extends Component {
 
   submitSeva = async (e) => {
     e.preventDefault()
-    const {paymentDate, sevaSubmitted, description, paidTo, amount} = this.state
-    const paymentDateFormatted = moment(paymentDate).format('YYYY-MM-DD')
-    const expenseData = Object.assign({}, {paymentDate: paymentDateFormatted, description, paidTo, amount: parseFloat(amount)})
-    // console.log(expenseData)
+    const {paymentDate, sevaSubmitted, description, paidTo, amount} = this.state;
+    const paymentDateFormatted = moment(paymentDate).format('YYYY-MM-DD');
+    const expenseData = Object.assign({}, {paymentDate: paymentDateFormatted, description, paidTo, amount: parseFloat(amount)});
 
     this.setState({loading: true})
     
@@ -35,9 +34,6 @@ class Expenses extends Component {
       this.setState({sevaSubmitted: true, loading: false})
       
     }
-
-    /*For testing purpose, uncomment this*/
-    // this.setState({sevaSubmitted: true, loading: false})
   }
 
   render () {
